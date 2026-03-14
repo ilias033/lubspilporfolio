@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Special+Elite&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --paper: #f4ede0;
+    --paper-dark: #e8dcc8;
+    --ink: #1a120a;
+    --ink-mid: #4a3728;
+    --ink-light: #7a6050;
+    --accent: #8b1a1a;
+    --accent2: #c8860a;
+    --border: #b8a090;
+  }
+
+  body {
+    font-family: 'Crimson Text', Georgia, serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+  }
+
+  /* ── NAV ── */
+  nav {
+    border-bottom: 2px solid var(--ink);
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    position: relative;
+    z-index: 10;
+    background: var(--paper);
+  }
+
+  .nav-title {
+    font-family: 'Special Elite', monospace;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+  }
+
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    font-family: 'Special Elite', monospace;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  #admin-btn {
+    font-family: 'Special Elite', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: none;
+    border: 1px solid var(--border);
+    padding: 5px 14px;
+    cursor: pointer;
+    color: var(--ink-light);
+    transition: all 0.2s;
+  }
+  #admin-btn:hover { border-color: var(--ink); color: var(--ink); }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    z-index: 1;
+    padding: 80px 40px 60px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: end;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .hero-rule {
+    width: 60px; height: 3px;
+    background: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(48px, 7vw, 88px);
+    line-height: 0.95;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-family: 'Special Elite', monospace;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    margin-top: 24px;
+  }
+
+  .hero-bio {
+    font-size: 20px;
+    line-height: 1.7;
+    color: var(--ink-mid);
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+  }
+
+  .hero-bio strong { color: var(--ink); font-weight: 600; }
+
+  /* ── SECTION ── */
+  .section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 40px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-label {
+    font-family: 'Special Elite', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 40px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  /* ── PROJECTS GRID ── */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 32px;
+  }
+
+  .project-card {
+    border: 1px solid var(--border);
+    background: var(--paper-dark);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .project-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+
+  .project-card-inner { padding: 24px; }
+
+  .project-number {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--paper);
+    -webkit-text-stroke: 1px var(--border);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .project-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .project-desc {
+    font-size: 16px;
+    color: var(--ink-mid);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .project-video {
+    width: 100%;
+    aspect-ratio: 16/9;
+    border: none;
+    display: block;
+    background: var(--ink);
+  }
+
+  .project-tag {
+    display: inline-block;
+    font-family: 'Special Elite', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border: 1px solid var(--accent2);
+    color: var(--accent2);
+    padding: 3px 8px;
+    margin-top: 12px;
+  }
+
+  .no-projects {
+    font-family: 'Special Elite', monospace;
+    font-size: 14px;
+    color: var(--ink-light);
+    letter-spacing: 0.1em;
+    padding: 40px;
+    border: 1px dashed var(--border);
+    text-align: center;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 2px solid var(--ink);
+    padding: 24px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    background: var(--paper);
+  }
+  footer p {
+    font-family: 'Special Elite', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+  }
+
+  /* ── MODAL BASE ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(20,12,4,0.75);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.active { display: flex; }
+
+  .modal {
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    width: 100%;
+    max-width: 480px;
+    padding: 40px;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 16px; right: 20px;
+    background: none; border: none;
+    font-size: 22px; cursor: pointer;
+    color: var(--ink-light);
+    line-height: 1;
+  }
+  .modal-close:hover { color: var(--accent); }
+
+  .modal h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .modal-sub {
+    font-family: 'Special Elite', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .form-group { margin-bottom: 18px; }
+  .form-group label {
+    display: block;
+    font-family: 'Special Elite', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    margin-bottom: 6px;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    background: var(--paper-dark);
+    border: 1px solid var(--border);
+    padding: 10px 12px;
+    font-family: 'Crimson Text', Georgia, serif;
+    font-size: 16px;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus { border-color: var(--ink); }
+  .form-group textarea { resize: vertical; min-height: 80px; }
+
+  .btn-primary {
+    width: 100%;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    padding: 13px;
+    font-family: 'Special Elite', monospace;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 8px;
+  }
+  .btn-primary:hover { background: var(--accent); }
+
+  .btn-secondary {
+    background: none;
+    color: var(--ink-mid);
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    font-family: 'Special Elite', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--ink); color: var(--ink); }
+
+  .btn-danger {
+    background: none;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 6px 12px;
+    font-family: 'Special Elite', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-danger:hover { background: var(--accent); color: var(--paper); }
+
+  .form-error {
+    color: var(--accent);
+    font-size: 14px;
+    margin-top: 10px;
+    font-style: italic;
+  }
+
+  /* ── EDITOR PANEL ── */
+  .editor-panel {
+    display: none;
+    position: fixed;
+    top: 0; right: 0;
+    width: 420px;
+    height: 100vh;
+    background: var(--paper-dark);
+    border-left: 2px solid var(--ink);
+    z-index: 50;
+    overflow-y: auto;
+    flex-direction: column;
+  }
+  .editor-panel.active { display: flex; }
+
+  .editor-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: var(--paper-dark);
+    z-index: 2;
+  }
+
+  .editor-header h3 {
+    font-family: 'Special Elite', monospace;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .editor-body { padding: 24px; flex: 1; }
+
+  .editor-section {
+    margin-bottom: 32px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+  .editor-section:last-child { border-bottom: none; }
+
+  .editor-section-title {
+    font-family: 'Special Elite', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .project-item {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .project-item-title {
+    font-size: 15px;
+    font-weight: 600;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .editor-actions { display: flex; gap: 8px; margin-top: 16px; }
+
+  .badge-logged-in {
+    font-family: 'Special Elite', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: var(--accent);
+    color: var(--paper);
+    padding: 3px 10px;
+    margin-right: 10px;
+  }
+
+  /* ── SIGNUP TOGGLE ── */
+  .form-toggle {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 15px;
+    color: var(--ink-mid);
+  }
+  .form-toggle a {
+    color: var(--accent);
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  /* animations */
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .hero, .section { animation: fadeIn 0.6s ease both; }
+  .section { animation-delay: 0.15s; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-title" id="nav-site-title">My Portfolio</span>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span class="badge-logged-in" id="logged-in-badge" style="display:none"></span>
+    <button id="admin-btn" onclick="openLoginOrEditor()">Editor</button>
+  </div>
+</nav>
+
+<!-- HERO / ABOUT -->
+<div class="hero" id="about">
+  <div>
+    <div class="hero-rule"></div>
+    <h1 id="hero-title">Your <em>Name</em><br>Here</h1>
+    <p class="hero-sub" id="hero-subtitle">Portfolio &amp; Showcase</p>
+  </div>
+  <div>
+    <p class="hero-bio" id="hero-bio">
+      Welcome to my portfolio. I create things that matter. Replace this with your own story — who you are, what you make, and what drives you. <strong>This is your space.</strong>
+    </p>
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<div class="section" id="projects">
+  <p class="section-label">Selected Work</p>
+  <h2 class="section-title" id="section-projects-title">Projects</h2>
+  <div class="projects-grid" id="projects-grid">
+    <div class="no-projects">No projects yet — add some in the editor panel.</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p id="footer-text">All rights reserved</p>
+  <p id="footer-script">Built with passion.</p>
+</footer>
+
+<!-- ══ LOGIN / SIGNUP MODAL ══ -->
+<div class="modal-overlay" id="login-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('login-modal')">&times;</button>
+
+    <!-- LOGIN FORM -->
+    <div id="form-login">
+      <h2>Editor Login</h2>
+      <p class="modal-sub">Access your editor panel</p>
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="login-username" placeholder="your username" autocomplete="username">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <p class="form-error" id="login-error" style="display:none"></p>
+      <button class="btn-primary" onclick="doLogin()">Sign In</button>
+      <p class="form-toggle">No account? <a onclick="showSignup()">Create one</a></p>
+    </div>
+
+    <!-- SIGNUP FORM -->
+    <div id="form-signup" style="display:none">
+      <h2>Create Account</h2>
+      <p class="modal-sub">Set up your editor access</p>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="signup-email" placeholder="Enter your email">
+      </div>
+      <div class="form-group">
+        <label>Choose Username</label>
+        <input type="text" id="signup-username" placeholder="your username">
+      </div>
+      <div class="form-group">
+        <label>Choose Password</label>
+        <input type="password" id="signup-password" placeholder="••••••••">
+      </div>
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <input type="password" id="signup-confirm" placeholder="••••••••">
+      </div>
+      <p class="form-error" id="signup-error" style="display:none"></p>
+      <button class="btn-primary" onclick="doSignup()">Create Account</button>
+      <p class="form-toggle">Already have one? <a onclick="showLogin()">Sign in</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ADD / EDIT PROJECT MODAL ══ -->
+<div class="modal-overlay" id="project-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('project-modal')">&times;</button>
+    <h2 id="project-modal-title">Add Project</h2>
+    <p class="modal-sub">Fill in your project details</p>
+    <input type="hidden" id="project-edit-id">
+    <div class="form-group">
+      <label>Project Title</label>
+      <input type="text" id="p-title" placeholder="e.g. Short Film 2024">
+    </div>
+    <div class="form-group">
+      <label>Description</label>
+      <textarea id="p-desc" placeholder="What is this project about?"></textarea>
+    </div>
+    <div class="form-group">
+      <label>Streamable Video URL</label>
+      <input type="text" id="p-video" placeholder="https://streamable.com/xxxxxx">
+    </div>
+    <div class="form-group">
+      <label>Tag / Category</label>
+      <input type="text" id="p-tag" placeholder="e.g. Film, Design, Music">
+    </div>
+    <p class="form-error" id="project-error" style="display:none"></p>
+    <button class="btn-primary" onclick="saveProject()">Save Project</button>
+  </div>
+</div>
+
+<!-- ══ EDITOR PANEL ══ -->
+<div class="editor-panel" id="editor-panel">
+  <div class="editor-header">
+    <h3>Editor Panel</h3>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="btn-secondary" onclick="doLogout()">Log out</button>
+      <button class="modal-close" style="position:static;font-size:20px;" onclick="closeEditor()">&times;</button>
+    </div>
+  </div>
+  <div class="editor-body">
+
+    <!-- Page Header -->
+    <div class="editor-section">
+      <p class="editor-section-title">Page Header</p>
+      <div class="form-group">
+        <label>Site Title (nav)</label>
+        <input type="text" id="e-site-title" placeholder="My Portfolio">
+      </div>
+      <div class="form-group">
+        <label>Hero Name / Title</label>
+        <input type="text" id="e-hero-title" placeholder="Your Name">
+      </div>
+      <div class="form-group">
+        <label>Hero Subtitle</label>
+        <input type="text" id="e-hero-subtitle" placeholder="Portfolio &amp; Showcase">
+      </div>
+      <button class="btn-primary" onclick="saveHeader()">Save Header</button>
+    </div>
+
+    <!-- Bio -->
+    <div class="editor-section">
+      <p class="editor-section-title">About Me / Bio</p>
+      <div class="form-group">
+        <label>Bio Text</label>
+        <textarea id="e-bio" style="min-height:120px;" placeholder="Write something about yourself..."></textarea>
+      </div>
+      <button class="btn-primary" onclick="saveBio()">Save Bio</button>
+    </div>
+
+    <!-- Projects -->
+    <div class="editor-section">
+      <p class="editor-section-title">Projects</p>
+      <div id="editor-projects-list"></div>
+      <div class="editor-actions">
+        <button class="btn-primary" style="flex:1;" onclick="openAddProject()">+ Add Project</button>
+      </div>
+    </div>
+
+    <!-- Projects Section Title -->
+    <div class="editor-section">
+      <p class="editor-section-title">Section Title</p>
+      <div class="form-group">
+        <label>Projects Section Heading</label>
+        <input type="text" id="e-projects-title" placeholder="Projects">
+      </div>
+      <button class="btn-primary" onclick="saveProjectsTitle()">Save</button>
+    </div>
+
+    <!-- Footer Script -->
+    <div class="editor-section">
+      <p class="editor-section-title">Footer / Script</p>
+      <div class="form-group">
+        <label>Footer Left Text</label>
+        <input type="text" id="e-footer-text" placeholder="All rights reserved">
+      </div>
+      <div class="form-group">
+        <label>Footer Right Script</label>
+        <input type="text" id="e-footer-script" placeholder="Built with passion.">
+      </div>
+      <button class="btn-primary" onclick="saveFooter()">Save Footer</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════
+const ADMIN_EMAIL = 'iliaselmahdaoui29@gmail.com';
+
+let state = loadState();
+let loggedIn = false;
+let currentUser = null;
+
+function loadState() {
+  try {
+    const s = localStorage.getItem('portfolio_state');
+    return s ? JSON.parse(s) : defaultState();
+  } catch(e) { return defaultState(); }
+}
+
+function defaultState() {
+  return {
+    siteTitle: 'My Portfolio',
+    heroTitle: 'Your Name Here',
+    heroSubtitle: 'Portfolio & Showcase',
+    heroBio: 'Welcome to my portfolio. I create things that matter. Replace this with your own story — who you are, what you make, and what drives you.',
+    projectsTitle: 'Projects',
+    footerText: 'All rights reserved',
+    footerScript: 'Built with passion.',
+    projects: [],
+    users: []
+  };
+}
+
+function saveState() {
+  localStorage.setItem('portfolio_state', JSON.stringify(state));
+}
+
+// ══════════════════════════════════════
+//  RENDER
+// ══════════════════════════════════════
+function renderPage() {
+  document.getElementById('nav-site-title').textContent = state.siteTitle;
+  document.title = state.siteTitle;
+
+  // hero title supports basic line break via "/"
+  const heroEl = document.getElementById('hero-title');
+  const parts = state.heroTitle.split('/');
+  heroEl.innerHTML = parts.map((p,i) => i === 0 ? `<em>${p.trim()}</em>` : p.trim()).join('<br>');
+  if (parts.length === 1) heroEl.innerHTML = state.heroTitle;
+
+  document.getElementById('hero-subtitle').textContent = state.heroSubtitle;
+  document.getElementById('hero-bio').textContent = state.heroBio;
+  document.getElementById('section-projects-title').textContent = state.projectsTitle;
+  document.getElementById('footer-text').textContent = state.footerText;
+  document.getElementById('footer-script').textContent = state.footerScript;
+
+  renderProjects();
+}
+
+function renderProjects() {
+  const grid = document.getElementById('projects-grid');
+  if (!state.projects.length) {
+    grid.innerHTML = '<div class="no-projects">No projects yet — add some in the editor panel.</div>';
+    return;
+  }
+  grid.innerHTML = state.projects.map((p, i) => {
+    const embedUrl = streamableEmbed(p.video);
+    const videoHtml = embedUrl
+      ? `<iframe class="project-video" src="${embedUrl}" allowfullscreen loading="lazy"></iframe>`
+      : '';
+    return `
+      <div class="project-card">
+        <div class="project-card-inner">
+          <div class="project-number">0${i+1}</div>
+          <div class="project-title">${escHtml(p.title)}</div>
+          <p class="project-desc">${escHtml(p.desc)}</p>
+          ${videoHtml}
+          ${p.tag ? `<span class="project-tag">${escHtml(p.tag)}</span>` : ''}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function streamableEmbed(url) {
+  if (!url) return '';
+  const m = url.match(/streamable\.com\/([a-zA-Z0-9]+)/);
+  return m ? `https://streamable.com/e/${m[1]}` : '';
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ══════════════════════════════════════
+//  AUTH
+// ══════════════════════════════════════
+function openLoginOrEditor() {
+  if (loggedIn) {
+    openEditor();
+  } else {
+    showLogin();
+    document.getElementById('login-modal').classList.add('active');
+  }
+}
+
+function showLogin() {
+  document.getElementById('form-login').style.display = '';
+  document.getElementById('form-signup').style.display = 'none';
+  document.getElementById('login-error').style.display = 'none';
+  document.getElementById('login-username').value = '';
+  document.getElementById('login-password').value = '';
+}
+
+function showSignup() {
+  document.getElementById('form-login').style.display = 'none';
+  document.getElementById('form-signup').style.display = '';
+  document.getElementById('signup-error').style.display = 'none';
+}
+
+function doLogin() {
+  const username = document.getElementById('login-username').value.trim();
+  const password = document.getElementById('login-password').value;
+  const errEl = document.getElementById('login-error');
+
+  if (!username || !password) {
+    errEl.textContent = 'Please fill in all fields.';
+    errEl.style.display = '';
+    return;
+  }
+
+  const user = state.users.find(u => u.username === username && u.password === password);
+  if (!user) {
+    errEl.textContent = 'Incorrect username or password.';
+    errEl.style.display = '';
+    return;
+  }
+
+  loggedIn = true;
+  currentUser = user;
+  closeModal('login-modal');
+  setLoggedInUI();
+  openEditor();
+}
+
+function doSignup() {
+  const email = document.getElementById('signup-email').value.trim().toLowerCase();
+  const username = document.getElementById('signup-username').value.trim();
+  const password = document.getElementById('signup-password').value;
+  const confirm = document.getElementById('signup-confirm').value;
+  const errEl = document.getElementById('signup-error');
+
+  errEl.style.display = 'none';
+
+  if (!email || !username || !password || !confirm) {
+    errEl.textContent = 'Please fill in all fields.';
+    errEl.style.display = '';
+    return;
+  }
+  if (email !== ADMIN_EMAIL) {
+    errEl.textContent = 'This email is not authorized to register.';
+    errEl.style.display = '';
+    return;
+  }
+  if (password !== confirm) {
+    errEl.textContent = 'Passwords do not match.';
+    errEl.style.display = '';
+    return;
+  }
+  if (password.length < 6) {
+    errEl.textContent = 'Password must be at least 6 characters.';
+    errEl.style.display = '';
+    return;
+  }
+  if (state.users.find(u => u.username === username)) {
+    errEl.textContent = 'That username is already taken.';
+    errEl.style.display = '';
+    return;
+  }
+  if (state.users.find(u => u.email === email)) {
+    errEl.textContent = 'An account with this email already exists.';
+    errEl.style.display = '';
+    return;
+  }
+
+  const newUser = { email, username, password };
+  state.users.push(newUser);
+  saveState();
+
+  loggedIn = true;
+  currentUser = newUser;
+  closeModal('login-modal');
+  setLoggedInUI();
+  openEditor();
+}
+
+function doLogout() {
+  loggedIn = false;
+  currentUser = null;
+  closeEditor();
+  document.getElementById('logged-in-badge').style.display = 'none';
+  document.getElementById('admin-btn').textContent = 'Editor';
+}
+
+function setLoggedInUI() {
+  const badge = document.getElementById('logged-in-badge');
+  badge.textContent = currentUser.username;
+  badge.style.display = '';
+  document.getElementById('admin-btn').textContent = 'Open Editor';
+}
+
+// ══════════════════════════════════════
+//  EDITOR
+// ══════════════════════════════════════
+function openEditor() {
+  // populate fields
+  document.getElementById('e-site-title').value = state.siteTitle;
+  document.getElementById('e-hero-title').value = state.heroTitle;
+  document.getElementById('e-hero-subtitle').value = state.heroSubtitle;
+  document.getElementById('e-bio').value = state.heroBio;
+  document.getElementById('e-projects-title').value = state.projectsTitle;
+  document.getElementById('e-footer-text').value = state.footerText;
+  document.getElementById('e-footer-script').value = state.footerScript;
+  renderEditorProjects();
+  document.getElementById('editor-panel').classList.add('active');
+}
+
+function closeEditor() {
+  document.getElementById('editor-panel').classList.remove('active');
+}
+
+function renderEditorProjects() {
+  const list = document.getElementById('editor-projects-list');
+  if (!state.projects.length) {
+    list.innerHTML = '<p style="font-size:14px;color:var(--ink-light);font-style:italic;margin-bottom:12px;">No projects yet.</p>';
+    return;
+  }
+  list.innerHTML = state.projects.map((p, i) => `
+    <div class="project-item">
+      <span class="project-item-title">${escHtml(p.title)}</span>
+      <div style="display:flex;gap:6px;flex-shrink:0;">
+        <button class="btn-secondary" onclick="openEditProject(${i})">Edit</button>
+        <button class="btn-danger" onclick="deleteProject(${i})">Del</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function saveHeader() {
+  state.siteTitle = document.getElementById('e-site-title').value.trim() || 'My Portfolio';
+  state.heroTitle = document.getElementById('e-hero-title').value.trim() || 'Your Name Here';
+  state.heroSubtitle = document.getElementById('e-hero-subtitle').value.trim() || 'Portfolio & Showcase';
+  saveState();
+  renderPage();
+  flash('Header saved!');
+}
+
+function saveBio() {
+  state.heroBio = document.getElementById('e-bio').value.trim() || '';
+  saveState();
+  renderPage();
+  flash('Bio saved!');
+}
+
+function saveProjectsTitle() {
+  state.projectsTitle = document.getElementById('e-projects-title').value.trim() || 'Projects';
+  saveState();
+  renderPage();
+  flash('Section title saved!');
+}
+
+function saveFooter() {
+  state.footerText = document.getElementById('e-footer-text').value.trim() || 'All rights reserved';
+  state.footerScript = document.getElementById('e-footer-script').value.trim() || '';
+  saveState();
+  renderPage();
+  flash('Footer saved!');
+}
+
+// ══════════════════════════════════════
+//  PROJECTS CRUD
+// ══════════════════════════════════════
+function openAddProject() {
+  document.getElementById('project-modal-title').textContent = 'Add Project';
+  document.getElementById('project-edit-id').value = '';
+  document.getElementById('p-title').value = '';
+  document.getElementById('p-desc').value = '';
+  document.getElementById('p-video').value = '';
+  document.getElementById('p-tag').value = '';
+  document.getElementById('project-error').style.display = 'none';
+  document.getElementById('project-modal').classList.add('active');
+}
+
+function openEditProject(i) {
+  const p = state.projects[i];
+  document.getElementById('project-modal-title').textContent = 'Edit Project';
+  document.getElementById('project-edit-id').value = i;
+  document.getElementById('p-title').value = p.title;
+  document.getElementById('p-desc').value = p.desc;
+  document.getElementById('p-video').value = p.video;
+  document.getElementById('p-tag').value = p.tag || '';
+  document.getElementById('project-error').style.display = 'none';
+  document.getElementById('project-modal').classList.add('active');
+}
+
+function saveProject() {
+  const title = document.getElementById('p-title').value.trim();
+  const desc = document.getElementById('p-desc').value.trim();
+  const video = document.getElementById('p-video').value.trim();
+  const tag = document.getElementById('p-tag').value.trim();
+  const errEl = document.getElementById('project-error');
+
+  if (!title) {
+    errEl.textContent = 'Please enter a project title.';
+    errEl.style.display = '';
+    return;
+  }
+
+  const editId = document.getElementById('project-edit-id').value;
+  const project = { title, desc, video, tag };
+
+  if (editId === '') {
+    state.projects.push(project);
+  } else {
+    state.projects[parseInt(editId)] = project;
+  }
+
+  saveState();
+  renderPage();
+  renderEditorProjects();
+  closeModal('project-modal');
+  flash('Project saved!');
+}
+
+function deleteProject(i) {
+  if (!confirm('Delete this project?')) return;
+  state.projects.splice(i, 1);
+  saveState();
+  renderPage();
+  renderEditorProjects();
+}
+
+// ══════════════════════════════════════
+//  UTILS
+// ══════════════════════════════════════
+function closeModal(id) {
+  document.getElementById(id).classList.remove('active');
+}
+
+function flash(msg) {
+  const el = document.createElement('div');
+  el.textContent = msg;
+  Object.assign(el.style, {
+    position: 'fixed', bottom: '30px', left: '50%', transform: 'translateX(-50%)',
+    background: 'var(--ink)', color: 'var(--paper)',
+    fontFamily: "'Special Elite', monospace", fontSize: '12px',
+    letterSpacing: '0.15em', textTransform: 'uppercase',
+    padding: '10px 24px', zIndex: '999',
+    animation: 'fadeIn 0.3s ease'
+  });
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 2200);
+}
+
+// ══════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════
+renderPage();
+</script>
+</body>
+</html>
